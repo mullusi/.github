@@ -7,7 +7,7 @@ Invariants: production secrets stay outside source; internal control artifacts a
 
 # Mullusi Repository Boundary Map
 
-Observed on 2026-05-14.
+Observed on 2026-05-15.
 
 ## Operating Invariants
 
@@ -23,6 +23,7 @@ Observed on 2026-05-14.
 | --- | --- | --- | --- | --- | --- |
 | `mullusi-site` | Public company website for `mullusi.com` | Public | MIT | Production public site through GitHub Pages | Protect `main`; keep Pages validation required |
 | `mullusi-docs` | Public technical documentation for `docs.mullusi.com` | Public | Add explicit license or policy notice | Production docs through GitHub Pages | Protect `main`; keep docs validation required |
+| `mullusi-io-redirect` | Static redirect from `mullusi.io` to `mullusi.com` | Public | Add explicit license or policy notice | Launch-support redirect through GitHub Pages; DNS cutover pending | Protect `main`; keep redirect validation required |
 | `msic-sdk` | Private TypeScript SDK for governed symbolic intelligence cell work | Private | MIT | Release candidate source and package source | Protect `main`; publish or retract npm install claims |
 | `mullu-control-plane` | API and dashboard control-plane baseline for `api.mullusi.com` and `dashboard.mullusi.com` | Private until launch review | Add explicit license or private-use notice | Deployment blueprint present; production host not verified here | Protect `main`; deploy after DNS and host secrets are configured |
 | `ops` | Internal operating map and company control notebook | Private | Private-use notice recommended | Source of operational truth, not public product | Make private; protect `main` |
@@ -44,6 +45,7 @@ Repository visibility, archive state, branch protection, and release channels ar
 gh repo list mullusi --limit 200 --json name,visibility,isArchived,defaultBranchRef
 gh run list --repo mullusi/mullusi-site --limit 5
 gh run list --repo mullusi/mullusi-docs --limit 5
+gh run list --repo mullusi/mullusi-io-redirect --limit 5
 gh run list --repo mullusi/mullu-control-plane --limit 5
 gh run list --repo mullusi/msic-sdk --limit 5
 npm.cmd view @mullusi/msic-sdk version dist-tags --json
