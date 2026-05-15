@@ -22,11 +22,11 @@ Observed on 2026-05-15.
 | Repository | Role | Required visibility | License stance | Production relation | Next action |
 | --- | --- | --- | --- | --- | --- |
 | `mullusi-site` | Public company website for `mullusi.com` | Public | MIT | Production public site through GitHub Pages | Protect `main`; keep Pages validation required |
-| `mullusi-docs` | Public technical documentation for `docs.mullusi.com` | Public | Add explicit license or policy notice | Production docs through GitHub Pages | Protect `main`; keep docs validation required |
-| `mullusi-io-redirect` | Static redirect from `mullusi.io` to `mullusi.com` | Public | Add explicit license or policy notice | Launch-support redirect through GitHub Pages; DNS cutover pending | Protect `main`; keep redirect validation required |
+| `mullusi-docs` | Public technical documentation for `docs.mullusi.com` | Public | Publication policy proposed in `mullusi-docs#1` | Production docs through GitHub Pages | Keep `main` protected; keep docs validation required |
+| `mullusi-io-redirect` | Static redirect from `mullusi.io` to `mullusi.com` | Public | All-rights-reserved public rights boundary present | Launch-support redirect through GitHub Pages; DNS cutover pending | Keep `main` protected; keep redirect validation required |
 | `msic-sdk` | Private TypeScript SDK for governed symbolic intelligence cell work | Private | MIT | Release candidate source and package source | Protect `main`; publish or retract npm install claims |
 | `mullu-control-plane` | API and dashboard control-plane baseline for `api.mullusi.com` and `dashboard.mullusi.com` | Private until launch review | Add explicit license or private-use notice | Deployment blueprint present; production host not verified here | Protect `main`; deploy after DNS and host secrets are configured |
-| `ops` | Internal operating map and company control notebook | Private | Private-use notice recommended | Source of operational truth, not public product | Make private; protect `main` |
+| `ops` | Internal operating map and company control notebook | Private | Private-use notice recommended | Source of operational truth, not public product | Keep private; protect `main` when entitlement permits |
 | `.github` | Organization defaults, templates, and shared policies | Public | MIT | Governance support repository | Protect `main`; maintain this boundary map |
 | `scc-harness` | Private governed execution harness | Private | Existing nonstandard license | Kernel research and execution substrate | Protect `master`; run CI before integration |
 | `mullusi-core` | Older public symbolic execution prototype | Public or archive after migration | GPL-3.0 | Legacy or foundation reference | Resolve issue #1; decide revive versus migrate |
