@@ -1,5 +1,10 @@
 # .github
-Default templates and policies for all mullusi projects.
+Default templates and policies for all Mullusi projects.
+
+The repository is public because organization templates and reporting policies
+are intentionally reusable. The MIT license applies only to this repository's
+templates and policy text; product source, runtime systems, research kernels,
+deployment records, and brand assets require their own explicit license.
 
 ## Shared Files
 
