@@ -10,8 +10,12 @@ deployment records, and brand assets require their own explicit license.
 
 | File | Purpose |
 | --- | --- |
+| `profile/README.md` | Public GitHub organization profile |
 | `REPO_BOUNDARY.md` | Repository role, visibility, and production boundary map |
 | `SECURITY.md` | Default security reporting and response policy |
+| `CONTRIBUTING.md` | Default contribution and verification policy |
+| `SUPPORT.md` | Default support routing policy |
+| `CODE_OF_CONDUCT.md` | Default collaboration conduct policy |
 | `.github/pull_request_template.md` | Pull request proof and rollback checklist |
 | `.github/CODEOWNERS` | Default owner routing hint |
 | `.github/ISSUE_TEMPLATE/` | Default issue templates |
