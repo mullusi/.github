@@ -7,7 +7,7 @@ Invariants: production secrets stay outside source; internal control artifacts a
 
 # Mullusi Repository Boundary Map
 
-Observed on 2026-05-24.
+Observed on 2026-05-25.
 
 ## Operating Invariants
 
@@ -23,7 +23,7 @@ Observed on 2026-05-24.
 | Repository | Role | Required visibility | License stance | Production relation | Next action |
 | --- | --- | --- | --- | --- | --- |
 | `mullusi-company-site` | Private source for `mullusi.com` public website | Private | All-rights-reserved source notice | Production website through Cloudflare Pages | Keep `main` validated; deploy only `dist`; preserve Cloudflare handoff gates |
-| `mullusi-site` | Public governance mirror for website deployment evidence | Public | All-rights-reserved public evidence boundary | Not a live DNS origin; production source remains `mullusi-company-site` | Keep evidence-only; do not add strategic source changes |
+| `mullusi-site` | Private website governance and deployment evidence repository | Private | Private-use notice recommended | Not a live DNS origin; production source remains `mullusi-company-site` | Keep private until a scoped public evidence mirror is approved |
 | `mullusi-docs` | Public technical documentation for `docs.mullusi.com` | Public | Publication policy; no broad reuse grant without explicit license | Production docs through GitHub Pages; docs-only exception | Keep `KeepPublicBounded`; require docs validation and claim discipline |
 | `mullusi-io-redirect` | Private redirect artifact for future `mullusi.io` routing | Private | Private until routing gate passes | Not live; `mullusi.io` is SafeHalt under Namecheap forwarding/parking | Resolve DNS authority and HTTPS before publication |
 | `msic-sdk` | Private TypeScript SDK for governed symbolic intelligence cell work | Private | MIT | Release candidate source and package source | Keep private merge fallback controls; publish or retract npm install claims |
