@@ -1,6 +1,16 @@
-# Purpose: route default review ownership for Mullusi repositories.
-# Governance scope: shared review ownership and repository control review requests.
-# Dependencies: GitHub code owner routing and repository branch protection settings.
-# Invariants: ownership routing does not replace verification evidence or security review.
+# Purpose: route review ownership for Mullusi organization policy files.
+# Invariant: team routing does not replace verification evidence, CI, security review, or rollback proof.
 
-* @tamirat-wubie
+* @mullusi/owners
+
+/profile/ @mullusi/owners @mullusi/docs-maintainers
+/README.md @mullusi/owners @mullusi/docs-maintainers
+/CONTRIBUTING.md @mullusi/owners @mullusi/docs-maintainers
+/SUPPORT.md @mullusi/owners @mullusi/docs-maintainers
+/CODE_OF_CONDUCT.md @mullusi/owners @mullusi/docs-maintainers
+
+/SECURITY.md @mullusi/owners @mullusi/security
+/REPO_BOUNDARY.md @mullusi/owners @mullusi/security
+/.github/CODEOWNERS @mullusi/owners @mullusi/security
+/.github/pull_request_template.md @mullusi/owners @mullusi/security
+/.github/ISSUE_TEMPLATE/ @mullusi/owners @mullusi/docs-maintainers
