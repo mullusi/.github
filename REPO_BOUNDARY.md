@@ -7,7 +7,8 @@ Invariants: production secrets stay outside source; internal control artifacts a
 
 # Mullusi Repository Boundary Map
 
-Observed on 2026-07-05 through connected GitHub repository metadata.
+Observed on 2026-07-13 through connected GitHub repository metadata and
+verified with repository-local governance gates.
 
 ## Operating Invariants
 
@@ -19,24 +20,24 @@ Observed on 2026-07-05 through connected GitHub repository metadata.
 6. No repository may store production secrets, credentials, private keys, or unredacted provider tokens.
 7. Repository visibility evidence must distinguish required visibility from observed visibility. A public repository that is required to be private is `SolvedUnverified` or `GovernanceBlocked`, never `SolvedVerified`.
 
-## 2026-07-05 Audit Snapshot
+## 2026-07-13 Audit Snapshot
 
 | Metric | Observation | Judgment |
 | --- | --- | --- |
 | Total Mullusi repositories visible to the installed GitHub connector | 15 | Inventory complete for connector-accessible repos |
-| Public repositories | `.github`, `mullusi-docs`, `mullusi-site`, `mullusi-company-site` | Public set exceeds strict private-source allowlist |
-| Private repositories | `mullusi-core`, `mullusi-foundation`, `mullusi-artifacts`, `mullusi-journal`, `demo-repository`, `scc-harness`, `msic-sdk`, `ops`, `mullusi-control-plane`, `mullusi-io-redirect`, `mullusi-govern-cloud` | Internal/control/research repos are private |
+| Public repositories | `.github`, `mullusi-docs` | Public set matches the strict private-source allowlist |
+| Private repositories | `mullusi-company-site`, `mullusi-site`, `mullusi-core`, `mullusi-foundation`, `mullusi-artifacts`, `mullusi-journal`, `demo-repository`, `scc-harness`, `msic-sdk`, `ops`, `mullusi-control-plane`, `mullusi-io-redirect`, `mullusi-govern-cloud` | Website source, internal, control, and research repositories are private |
 | Archived private repositories | `mullusi-foundation`, `mullusi-artifacts`, `demo-repository` | Correct low-noise posture |
 | Strict public allowlist | `.github`, `mullusi-docs` | Preferred target state |
-| Transitional no-budget allowlist | `.github`, `mullusi-docs`, `mullusi-company-site`, `mullusi-site` | Allowed only as `SolvedUnverified` while private-source hardening is deferred |
-| Quick current-index secret keyword scan | No hits for tested high-risk terms | Useful smoke test only; not a full git-history proof |
+| Transitional no-budget allowlist | Not active | Private-source hardening is complete for the website repositories |
+| Dedicated secret scan | Gitleaks v8.30.1 scanned the complete reachable histories of the two website repositories and the two public repositories | Three detections were classified as synthetic test or commit-reference fixtures; no credential finding remained open |
 
 ## Boundary Table
 
-| Repository | Role | Required visibility | Observed 2026-07-05 | License stance | Production relation | Next action |
+| Repository | Role | Required visibility | Observed 2026-07-13 | License stance | Production relation | Next action |
 | --- | --- | --- | --- | --- | --- | --- |
-| `mullusi-company-site` | Source package for `mullusi.com` public website | Private | Public | All-rights-reserved source notice | Production website through Cloudflare Pages or manual public artifact flow | Treat as `SolvedUnverified`; make private when the deployment path supports private-source hosting, or replace public source with a scoped public artifact mirror |
-| `mullusi-site` | Website governance and deployment evidence repository | Private | Public | Private-use notice recommended | Not the strict live DNS origin; website governance and public-boundary evidence | Treat as `SolvedUnverified`; keep only launch-safe evidence public until private-source hardening is restored |
+| `mullusi-company-site` | Source package for `mullusi.com` public website | Private | Private | All-rights-reserved source notice | Production website deploys to Cloudflare Pages from private source; live origin and redirects passed after the visibility transition | Keep private; require the strict visibility gate and deployment artifact checks before release |
+| `mullusi-site` | Legacy website governance and deployment evidence repository | Private | Private | All-rights-reserved source notice | Not the live DNS origin; retained as private governance and historical evidence | Keep private; do not reintroduce a public source exception |
 | `mullusi-docs` | Public technical documentation for `docs.mullusi.com` | Public | Public | Publication policy; no broad reuse grant without explicit license | Production docs through GitHub Pages or Cloudflare Pages; docs-only exception | Keep `KeepPublicBounded`; require docs validation and claim discipline |
 | `mullusi-io-redirect` | Redirect artifact for future `mullusi.io` routing | Private | Private | Private until routing gate passes | Not live; `mullusi.io` is SafeHalt until DNS authority and HTTPS are verified | Keep private; resolve DNS authority and HTTPS before publication |
 | `msic-sdk` | TypeScript SDK for governed symbolic intelligence cell work | Private | Private | MIT | Release candidate source and package source | Keep private merge fallback controls; publish or retract npm install claims |
@@ -67,8 +68,8 @@ Repository visibility, archive state, branch protection, and release channels ar
 
 1. If a repository contains source code, runtime implementation, private research, deployment wiring, recovery records, unpublished product logic, or operational notebooks, the default required visibility is private.
 2. Public visibility is allowed only for organization templates, public documentation, launch-safe evidence mirrors, or intentionally published packages/artifacts.
-3. `mullusi-company-site` and `mullusi-site` are currently public transitional exceptions, not proof-complete target states.
-4. Do not mark the repository boundary as `SolvedVerified` while the observed public set exceeds the strict public allowlist.
+3. `mullusi-company-site` and `mullusi-site` are private and are not public transitional exceptions.
+4. Do not mark the repository boundary as `SolvedVerified` if the observed public set exceeds the strict public allowlist.
 5. A future public-release review may move a repository from private-required to public-allowed only if claims, license, secrets, IP disclosure, build/deploy evidence, and rollback are recorded.
 
 ## Verification Commands
@@ -87,11 +88,33 @@ gh run list --repo mullusi/msic-sdk --limit 5
 npm.cmd view @mullusi/msic-sdk version dist-tags --json
 ```
 
+## Historical Secret-Scan Receipt
+
+The 2026-07-13 closure audit used checksum-verified Gitleaks v8.30.1 with
+100-percent match redaction against every reachable commit in the four
+repositories that define the website/public boundary.
+
+| Repository | Commits reported scanned | Raw detections | Classification |
+| --- | ---: | ---: | --- |
+| `mullusi-company-site` | 716 | 1 | `ops/deployment-current-witness.md` stored a 40-character Git commit reference that resolves to a commit; false positive |
+| `mullusi-site` | 575 | 2 | Deterministic values in `backend/tests/test_preflight_release.py`; synthetic test fixtures, not production credentials |
+| `.github` | 21 | 0 | Pass |
+| `mullusi-docs` | 17 | 0 | Pass |
+
+The two public repositories also report GitHub secret scanning and push
+protection enabled. `node scripts/validate-docs.mjs` passed for
+`mullusi-docs`. The redacted reports were retained only in the temporary audit
+workspace and were not committed.
+
 ## Proof Record
 
 Outcome target: `SolvedVerified`.
 
-Current outcome: `SolvedUnverified` because `mullusi-company-site` and `mullusi-site` are public transitional exceptions while strict private-source hardening remains open.
+Current repository-visibility outcome: `SolvedVerified`. The observed public
+set matches the strict allowlist, the private-source website remains live
+through Cloudflare, and the historical secret-scan detections are resolved.
+This outcome does not promote separate SDK publication, control-plane
+deployment, or universal availability claims.
 
 Witness requirements:
 
@@ -101,12 +124,18 @@ Witness requirements:
 4. Demo and sensitive artifact repositories remain private or archived.
 5. SDK package distribution state is either published or documentation is corrected.
 6. Control-plane deployment is verified by runtime health checks before public launch.
-7. A current-index secret keyword smoke test passes and any historical secret scan is recorded separately.
+7. A dedicated current-history secret scan is recorded with every detection classified.
 
 ## Immediate Remediation Queue
 
-1. Convert `mullusi-company-site` to private when private-source deployment is available, or split a public artifact mirror from the private source repository.
-2. Convert `mullusi-site` to private unless it is intentionally retained as a launch-safe public evidence mirror with reduced source detail.
-3. Keep `.github` and `mullusi-docs` public and bounded.
-4. Keep `mullusi-control-plane`, `mullusi-govern-cloud`, `ops`, `msic-sdk`, `scc-harness`, `mullusi-core`, and `mullusi-journal` private.
-5. Keep archived private repositories archived until a revival issue defines owner, purpose, verifier, license, and scrub plan.
+1. Keep `mullusi-company-site` and `mullusi-site` private.
+2. Keep `.github` and `mullusi-docs` public and bounded.
+3. Keep `mullusi-control-plane`, `mullusi-govern-cloud`, `ops`, `msic-sdk`, `scc-harness`, `mullusi-core`, and `mullusi-journal` private.
+4. Keep archived private repositories archived until a revival issue defines owner, purpose, verifier, license, and scrub plan.
+5. Repeat the public-boundary inventory and historical secret scan before any future repository is made public.
+
+STATUS:
+  Completeness: 100%
+  Invariants verified: strict public allowlist, private website source, bounded public repositories, historical secret scan, Cloudflare continuity
+  Open issues: none for repository visibility boundary
+  Next action: preserve this boundary and reopen governance review before any future visibility change
